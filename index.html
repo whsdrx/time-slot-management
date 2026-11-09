@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Time-Slot Management — Roadmap Interaktif</title>
+<style>
+:root{--navy:#103f78;--blue:#1687e8;--green:#19a65a;--orange:#ff7a00;--sky:#eaf6ff;--ink:#17324f;--muted:#5d7188;--line:#d5e7f6;--bg:#f4f9fd}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.45 "Segoe UI",Arial,sans-serif}
+header{padding:28px clamp(18px,4vw,54px);color:#fff;background:linear-gradient(115deg,#103f78,#137cc4 72%,#43b5ed);position:relative;overflow:hidden}
+header:after{content:"";position:absolute;width:300px;height:300px;border:40px solid #ffffff16;border-radius:50%;right:6%;top:-170px}
+.kicker{text-transform:uppercase;letter-spacing:2px;font-weight:800;font-size:12px;opacity:.85}
+h1{font-size:clamp(28px,4vw,46px);line-height:1.08;margin:8px 0}.subtitle{max-width:760px;font-size:16px;margin:10px 0 0;opacity:.95}
+main{max-width:1500px;margin:auto;padding:18px;display:grid;grid-template-columns:260px minmax(0,1fr) 265px;gap:14px}
+.panel{background:white;border:1px solid var(--line);border-radius:16px;padding:17px;box-shadow:0 5px 18px #164e7a0b;min-width:0}
+h2{font-size:18px;color:var(--navy);margin:0 0 14px;display:flex;align-items:center;gap:8px}
+label{display:block;font-weight:700;font-size:13px;margin:13px 0 6px}
+select,input[type=time],input[type=text],input[type=date]{width:100%;padding:10px;border:1px solid #b9d5ed;border-radius:10px;background:#fff;color:var(--ink);font:inherit}
+.modes{display:grid;gap:7px}.mode{padding:10px;border:1px solid var(--line);border-radius:10px;background:#fff;text-align:left;cursor:pointer;color:var(--ink);font-weight:700}.mode.active{background:#e7f4ff;border-color:#1687e8;color:#075ba7}
+.check{display:flex;align-items:flex-start;gap:9px;margin:13px 0;font-weight:600;cursor:pointer}.check input{accent-color:var(--blue);width:17px;height:17px;margin-top:3px}.dot{width:10px;height:10px;display:inline-block;border-radius:50%;margin-right:6px}.green{color:var(--green)}.orange{color:var(--orange)}.blue{color:var(--blue)}
+.btn{width:100%;border:0;border-radius:10px;padding:12px 14px;background:linear-gradient(90deg,#0878d5,#1299ec);color:#fff;font-weight:800;cursor:pointer;margin-top:14px}.btn.secondary{background:#edf6ff;color:#075ba7;border:1px solid #c6e2f8}.btn:hover,.mode:hover{filter:brightness(.98);transform:translateY(-1px)}
+.small{font-size:12px;color:var(--muted)}.timeline-panel{padding:18px}.timeline-top{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap}.legend{display:flex;gap:12px;flex-wrap:wrap;font-size:12px;font-weight:700}
+.timeline{margin-top:14px;overflow-x:auto;padding-bottom:6px}.time-head,.lane{min-width:690px;display:grid;grid-template-columns:112px repeat(8,minmax(60px,1fr));gap:5px}
+.time-head{align-items:end;margin-bottom:8px}.tick{text-align:center;font-size:11px;font-weight:800;color:#53708e;border-bottom:2px solid #c6dcef;padding-bottom:7px}
+.lane{margin:8px 0 12px;align-items:stretch}.lane-name{border-radius:12px;padding:13px 9px;color:#fff;display:flex;flex-direction:column;justify-content:center;min-height:106px;font-weight:800}.lane-name small{font-weight:500;opacity:.9;font-size:11px}.lane-name.receiving{background:linear-gradient(145deg,#20b864,#11833e)}.lane-name.shipping{background:linear-gradient(145deg,#ff982d,#f06400)}.lane-name.supply{background:linear-gradient(145deg,#32a9f5,#0967be)}
+.slot{grid-column:var(--start)/span var(--span);border-radius:12px;padding:11px 10px;min-height:106px;position:relative;overflow:hidden;border:1px solid transparent;animation:fade .3s ease}.slot strong{display:block;font-size:12px;margin-bottom:5px}.slot span{font-size:11px;line-height:1.3;display:block}.slot.receiving{background:#dff8e9;border-color:#c6f0d7;color:#086d32}.slot.shipping{background:#fff0df;border-color:#ffe0bd;color:#9a4300}.slot.supply{background:#e0f2ff;border-color:#c9e8ff;color:#075ba7}.slot .emoji{font-size:20px;margin-top:7px;display:block}
+.empty{grid-column:2/10;background:#f7fbfe;border:1px dashed #d6e6f4;border-radius:12px;min-height:70px;display:flex;align-items:center;justify-content:center;color:#8298ac;font-size:12px}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:9px}.stat{background:#f3f9ff;border:1px solid #deedf9;border-radius:12px;padding:12px}.stat b{font-size:22px;color:var(--navy);display:block}.stat span{font-size:11px;color:var(--muted)}
+.summary-row{padding:12px 0;border-bottom:1px solid #e3eef7}.summary-row:last-child{border-bottom:0}.summary-row b{display:block;margin-bottom:4px}.bar{height:8px;background:#e5f0fa;border-radius:9px;overflow:hidden;margin-top:7px}.bar i{height:100%;display:block;border-radius:9px;transition:width .35s}
+.bottom{max-width:1500px;margin:0 auto;padding:0 18px 20px;display:grid;grid-template-columns:1fr 1fr;gap:14px}.benefits{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.benefit{background:#f6fbff;border-radius:12px;padding:12px}.benefit b{display:block;color:var(--navy);margin-bottom:4px}.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}.step{border-radius:12px;background:#f0f7ff;padding:12px;text-align:center;font-size:12px}.step strong{display:block;color:#0878d5;font-size:15px;margin-bottom:5px}
+.editor{border-top:1px solid var(--line);margin-top:16px;padding-top:12px}.editor-row{display:grid;grid-template-columns:1fr 1fr;gap:8px}.editor .btn{margin-top:8px}
+footer{background:#0e467f;color:white;padding:16px 24px;text-align:center;font-weight:700}
+@keyframes fade{from{opacity:.35;transform:translateY(3px)}to{opacity:1;transform:translateY(0)}}
+@media(max-width:1100px){main{grid-template-columns:230px minmax(0,1fr)}.right{grid-column:1/-1}.right .summary-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}.bottom{grid-template-columns:1fr}}
+@media(max-width:700px){main{grid-template-columns:1fr;padding:10px}.right{grid-column:auto}.right .summary-grid{grid-template-columns:1fr}.bottom{padding:0 10px 12px}.steps{grid-template-columns:repeat(2,1fr)}header{padding:22px 18px}.benefits{grid-template-columns:1fr 1fr}.panel{padding:14px}}
+</style>
+</head>
+<body>
+<header>
+  <div class="kicker">Dashboard operasional gudang</div>
+  <h1>⏱ Time-Slot Management</h1>
+  <div class="subtitle">Pisahkan waktu <b>Receiving</b>, <b>Shipping</b>, dan <b>Supply</b> agar aktivitas gudang lebih tertata, antrean berkurang, dan alur kerja makin lancar.</div>
+</header>
+<main>
+<section class="panel">
+  <h2>⚙️ Atur Jadwal</h2>
+  <label for="date">Tanggal operasional</label><input type="date" id="date" value="2026-10-13">
+  <label>Mode tampilan</label>
+  <div class="modes"><button class="mode active" data-mode="daily">▦ Harian</button><button class="mode" data-mode="weekly">▤ Mingguan (simulasi)</button><button class="mode" data-mode="custom">⚙ Kustom</button></div>
+  <label>Aktivitas yang ditampilkan</label>
+  <label class="check"><input type="checkbox" id="showReceiving" checked><span><span class="dot" style="background:var(--green)"></span>Receiving <span class="small">— barang masuk</span></span></label>
+  <label class="check"><input type="checkbox" id="showShipping" checked><span><span class="dot" style="background:var(--orange)"></span>Shipping <span class="small">— barang keluar</span></span></label>
+  <label class="check"><input type="checkbox" id="showSupply" checked><span><span class="dot" style="background:var(--blue)"></span>Supply <span class="small">— stok & kebutuhan internal</span></span></label>
+  <button class="btn" id="apply">Terapkan Perubahan ↻</button>
+  <button class="btn secondary" id="reset">Kembalikan Jadwal Awal</button>
+  <div class="editor">
+    <h2>＋ Tambah Slot</h2>
+    <div class="small">Tambahkan aktivitas ke jadwal harian. Slot akan muncul pada roadmap.</div>
+    <label for="activity">Nama aktivitas</label><input type="text" id="activity" placeholder="Contoh: Pemeriksaan stok">
+    <label for="category">Jenis aktivitas</label><select id="category"><option value="receiving">Receiving</option><option value="shipping">Shipping</option><option value="supply">Supply</option></select>
+    <div class="editor-row"><div><label for="start">Mulai</label><input type="time" id="start" value="08:00"></div><div><label for="end">Selesai</label><input type="time" id="end" value="10:00"></div></div>
+    <button class="btn" id="add">+ Tambahkan ke Roadmap</button>
+    <div class="small" id="notice" role="status" aria-live="polite"></div>
+  </div>
+</section>
+<section class="panel timeline-panel">
+  <div class="timeline-top"><div><h2>🗓 Roadmap Time-Slot Operasional</h2><div class="small" id="dateLabel">Jadwal harian • 06.00–20.00</div></div>
+  <div class="legend"><span><i class="dot" style="background:var(--green)"></i>Receiving</span><span><i class="dot" style="background:var(--orange)"></i>Shipping</span><span><i class="dot" style="background:var(--blue)"></i>Supply</span></div></div>
+  <div class="timeline" id="timeline"></div>
+  <p class="small">Tips: klik mode Kustom untuk mengatur jadwal sendiri. Slot dapat ditambah tanpa mengubah jadwal lain. Waktu yang bertumpuk perlu ditinjau oleh pengelola gudang.</p>
+</section>
+<section class="panel right">
+  <div class="summary-grid">
+    <div><h2>📋 Ringkasan Jadwal</h2><div id="summary"></div></div>
+    <div><h2>📊 Cakupan Waktu</h2><div class="stats"><div class="stat"><b id="activeHours">12 jam</b><span>Total waktu aktif gabungan</span></div><div class="stat"><b id="slotCount">9</b><span>Jumlah slot aktivitas</span></div><div class="stat"><b id="covered">86%</b><span>Perkiraan cakupan hari</span></div><div class="stat"><b id="overlap">0</b><span>Slot perlu ditinjau*</span></div></div><p class="small">*Perkiraan slot yang bertumpuk pada jenis aktivitas sama.</p></div>
+  </div>
+</section>
+</main>
+<div class="bottom">
+<section class="panel"><h2>💡 Manfaat Utama</h2><div class="benefits">
+<div class="benefit"><b>◷ Mengurangi waktu tunggu</b><span class="small">Kedatangan dan pengiriman memiliki waktu yang jelas.</span></div>
+<div class="benefit"><b>⚙ Meningkatkan efisiensi</b><span class="small">Tenaga kerja dan area bongkar-muat lebih mudah diatur.</span></div>
+<div class="benefit"><b>✓ Mengurangi kesalahan</b><span class="small">Dokumen, stok, dan barang diperiksa sesuai alur.</span></div>
+<div class="benefit"><b>↗ Produktivitas meningkat</b><span class="small">Tim mengetahui prioritas dan waktu kerjanya.</span></div>
+</div></section>
+<section class="panel"><h2>🚀 Alur Implementasi</h2><div class="steps"><div class="step"><strong>1. Analisis</strong>Periksa volume, kapasitas, dan jam sibuk.</div><div class="step"><strong>2. Atur slot</strong>Pisahkan waktu tiap aktivitas.</div><div class="step"><strong>3. Pantau</strong>Catat keterlambatan dan antrean.</div><div class="step"><strong>4. Optimalkan</strong>Sesuaikan jadwal dari data harian.</div></div></section>
+</div>
+<footer>Time-Slot Management &nbsp; → &nbsp; Gudang lebih tertata &nbsp; | &nbsp; Proses lebih cepat &nbsp; | &nbsp; Bisnis makin maju</footer>
+<script>
+const initial=[
+{id:1,cat:'receiving',start:6,end:8,name:'Penerimaan truk & dokumen',icon:'🚚'},
+{id:2,cat:'receiving',start:8,end:10,name:'Pemeriksaan kualitas & verifikasi',icon:'✓'},
+{id:3,cat:'receiving',start:10,end:12,name:'Putaway ke lokasi gudang',icon:'🏗️'},
+{id:4,cat:'shipping',start:12,end:14,name:'Picking & packing',icon:'📦'},
+{id:5,cat:'shipping',start:14,end:16,name:'Loading & dokumen',icon:'🚛'},
+{id:6,cat:'shipping',start:16,end:18,name:'Pengiriman ke pelanggan',icon:'🚚'},
+{id:7,cat:'supply',start:8,end:10,name:'Pengisian ulang stok & material',icon:'▤'},
+{id:8,cat:'supply',start:10,end:12,name:'Kontrol inventori & pembaruan sistem',icon:'▣'},
+{id:9,cat:'supply',start:14,end:16,name:'Pemindahan internal & dukungan',icon:'🏭'}
+];
+let slots=initial.map(x=>({...x})), mode='daily', nextId=10;
+const names={receiving:'Receiving',shipping:'Shipping',supply:'Supply'},colors={receiving:'var(--green)',shipping:'var(--orange)',supply:'var(--blue)'};
+const $=id=>document.getElementById(id);
+function fmt(n){return String(n).padStart(2,'0')+'.00'}
+function readTime(v){let p=v.split(':');return +p[0]+(+p[1]||0)/60}
+function render(){
+ const visible=['receiving','shipping','supply'].filter(c=>$('show'+c[0].toUpperCase()+c.slice(1)).checked);
+ const startHour=mode==='custom'?6:6,endHour=mode==='weekly'?20:20,span=endHour-startHour;
+ $('dateLabel').textContent=(mode==='weekly'?'Tampilan mingguan (simulasi)':'Jadwal '+(mode==='custom'?'kustom':'harian'))+' • '+fmt(startHour)+'–'+fmt(endHour)+' • '+$('date').value;
+ let html='<div class="time-head"><div></div>';
+ for(let h=startHour;h<=endHour;h+=2)html+=`<div class="tick" style="grid-column:span 1">${fmt(h)}</div>`;
+ html+='</div>';
+ for(const cat of visible){
+  html+=`<div class="lane"><div class="lane-name ${cat}">${cat==='receiving'?'🚚':cat==='shipping'?'📦':'🏭'} ${names[cat]}<small>${cat==='receiving'?'Barang masuk':cat==='shipping'?'Barang keluar':'Stok & kebutuhan internal'}</small></div>`;
+  const row=slots.filter(s=>s.cat===cat&&s.end>startHour&&s.start<endHour).sort((a,b)=>a.start-b.start);
+  if(!row.length){html+='<div class="empty">Belum ada slot untuk aktivitas ini</div>'}
+  row.forEach(s=>{
+   let st=Math.max(startHour,s.start),en=Math.min(endHour,s.end);
+   let colStart=2+Math.floor((st-startHour)/2),colSpan=Math.max(1,Math.ceil((en-st)/2));
+   html+=`<div class="slot ${cat}" style="--start:${colStart};--span:${colSpan}"><strong>${fmt(s.start).replace('.00','') }–${fmt(s.end)}</strong><span>${s.name}</span><i class="emoji">${s.icon||'•'}</i><button aria-label="Hapus ${s.name}" title="Hapus slot" onclick="removeSlot(${s.id})" style="position:absolute;right:5px;top:5px;border:0;border-radius:6px;background:#ffffffaa;color:#34495e;cursor:pointer">×</button></div>`;
+  });
+  html+='</div>';
+ }
+ if(!visible.length)html='<div class="empty" style="min-height:180px">Pilih minimal satu aktivitas di panel kiri.</div>';
+ $('timeline').innerHTML=html;
+ const active=slots.filter(s=>visible.includes(s.cat));
+ $('slotCount').textContent=active.length;
+ const hours=active.reduce((a,s)=>a+(s.end-s.start),0);
+ $('activeHours').textContent=hours+' jam';
+ $('covered').textContent=Math.min(100,Math.round(active.reduce((a,s)=>a+(s.end-s.start),0)/Math.max(1,span*visible.length)*100))+'%';
+ let overlaps=0;visible.forEach(c=>{let a=slots.filter(s=>s.cat===c).sort((x,y)=>x.start-y.start);for(let i=1;i<a.length;i++)if(a[i].start<a[i-1].end)overlaps++});
+ $('overlap').textContent=overlaps;
+ $('summary').innerHTML=visible.map(c=>{let arr=slots.filter(s=>s.cat===c);let total=arr.reduce((a,s)=>a+s.end-s.start,0);let min=arr.length?Math.min(...arr.map(s=>s.start)):0,max=arr.length?Math.max(...arr.map(s=>s.end)):0;return `<div class="summary-row"><b style="color:${colors[c]}"><i class="dot" style="background:${colors[c]}"></i>${names[c]}</b><div>${arr.length?fmt(min)+'–'+fmt(max):'Belum ada jadwal'} ${arr.length?`(${total} jam-slot)` :''}</div><div class="bar"><i style="background:${colors[c]};width:${Math.min(100,total/14*100)}%"></i></div></div>`}).join('');
+}
+function removeSlot(id){slots=slots.filter(s=>s.id!==id);render();$('notice').textContent='Slot berhasil dihapus dari tampilan.'}
+document.querySelectorAll('.mode').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('.mode').forEach(x=>x.classList.remove('active'));b.classList.add('active');mode=b.dataset.mode;render()}));
+$('apply').addEventListener('click',()=>{render();$('notice').textContent='Tampilan diperbarui sesuai pilihan Anda.'});
+$('date').addEventListener('change',render);
+['showReceiving','showShipping','showSupply'].forEach(id=>$(id).addEventListener('change',render));
+$('add').addEventListener('click',()=>{
+ const name=$('activity').value.trim(),cat=$('category').value,start=readTime($('start').value),end=readTime($('end').value);
+ if(!name){$('notice').textContent='Isi nama aktivitas terlebih dahulu.';return}
+ if(end<=start){$('notice').textContent='Jam selesai harus setelah jam mulai.';return}
+ if(start<6||end>20){$('notice').textContent='Untuk roadmap ini, pilih waktu antara 06.00 dan 20.00.';return}
+ slots.push({id:nextId++,cat,start,end,name,icon:cat==='receiving'?'🚚':cat==='shipping'?'📦':'🏭'});
+ $('activity').value='';$('notice').textContent='Slot ditambahkan. Periksa kemungkinan jadwal bertumpuk.';render();
+});
+$('reset').addEventListener('click',()=>{slots=initial.map(x=>({...x}));nextId=10;mode='daily';document.querySelectorAll('.mode').forEach(x=>x.classList.toggle('active',x.dataset.mode==='daily'));['showReceiving','showShipping','showSupply'].forEach(id=>$(id).checked=true);$('notice').textContent='Jadwal awal dipulihkan.';render()});
+render();
+</script>
+</body>
+</html>
